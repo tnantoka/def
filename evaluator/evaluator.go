@@ -1,9 +1,10 @@
 package evaluator
 
 import (
+	"fmt"
+
 	"def/ast"
 	"def/object"
-	"fmt"
 )
 
 var (

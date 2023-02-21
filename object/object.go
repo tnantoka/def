@@ -2,10 +2,11 @@ package object
 
 import (
 	"bytes"
-	"def/ast"
 	"fmt"
 	"hash/fnv"
 	"strings"
+
+	"def/ast"
 )
 
 type ObjectType string
