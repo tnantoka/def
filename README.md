@@ -1,4 +1,4 @@
-# Monkey
+# Def
 
 ## Development
 
@@ -10,7 +10,7 @@ $ docker compose exec app bash
 $ go fmt ./...
 
 # Test
-$ go test ./... -coverprofile=cover.out &&\
+$ go test ./... -coverprofile=cover.out && \
   go tool cover -html=cover.out -o coverage.html
 
 # REPL
