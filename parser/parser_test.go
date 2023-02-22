@@ -842,3 +842,37 @@ func testInfixExpression(t *testing.T, exp ast.Expression, left interface{},
 
 	return true
 }
+
+func TestErrorHandling(t *testing.T) {
+	tests := []struct {
+		input           string
+		expectedMessage string
+	}{
+		{"def = 1", "expected next token to be IDENT, got = instead"},
+		{"def a", "expected next token to be =, got EOF instead"},
+		{"(1", "expected next token to be ), got EOF instead"},
+		{"if true", "expected next token to be (, got TRUE instead"},
+		{"if (true", "expected next token to be ), got EOF instead"},
+		{"if (true) }", "expected next token to be {, got } instead"},
+		{"if (true) {} else }", "expected next token to be {, got } instead"},
+		{"fn)", "expected next token to be (, got ) instead"},
+		{"fn() }", "expected next token to be {, got } instead"},
+		{"fn( {", "expected next token to be ), got EOF instead"},
+		{"[1", "expected next token to be ], got EOF instead"},
+		{"[][1", "expected next token to be ], got EOF instead"},
+		{"{1:1", "expected next token to be ,, got EOF instead"},
+		{"{1;", "expected next token to be :, got ; instead"},
+	}
+
+	for _, tt := range tests {
+		l := lexer.New(tt.input)
+		p := New(l)
+		p.ParseProgram()
+
+		errors := p.Errors()
+		message := errors[0]
+		if message != tt.expectedMessage {
+			t.Errorf("wrong error message. expected=%q, got=%q", tt.expectedMessage, message)
+		}
+	}
+}

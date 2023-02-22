@@ -30,7 +30,8 @@ if (5 < 10) {
 "foo bar"
 [1, 2];
 {"foo": "bar"}
-`
+@
+!`
 
 	tests := []struct {
 		expectedType    token.TokenType
@@ -122,6 +123,8 @@ if (5 < 10) {
 		{token.COLON, ":"},
 		{token.STRING, "bar"},
 		{token.RBRACE, "}"},
+		{token.ILLEGAL, "@"},
+		{token.BANG, "!"},
 		{token.EOF, ""},
 	}
 
