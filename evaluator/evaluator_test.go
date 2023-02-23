@@ -183,7 +183,7 @@ if (10 > 1) {
 			"foobar",
 			"identifier not found: foobar"},
 		{`"Hello" - "World"`, "unknown operator: STRING - STRING"},
-		{`{"name": "Monkey"}[fn(x) { x }];`, "unusable as hash key: FUNCTION"},
+		{`{"name": "def"}[fn(x) { x }];`, "unusable as hash key: FUNCTION"},
 	}
 
 	for _, tt := range tests {
@@ -479,6 +479,42 @@ func TestHashIndexExpressions(t *testing.T) {
 		{`{5: 5}[5]`, 5},
 		{`{true: 5}[true]`, 5},
 		{`{false: 5}[false]`, 5},
+	}
+
+	for _, tt := range tests {
+		evaluated := testEval(tt.input)
+
+		integer, ok := tt.expected.(int)
+		if ok {
+			testIntegerObject(t, evaluated, int64(integer))
+		} else {
+			testNullObject(t, evaluated)
+		}
+	}
+}
+
+func TestRecursiveFibonacci(t *testing.T) {
+	tests := []struct {
+		input    string
+		expected interface{}
+	}{
+		{
+			`
+          def fibonacci = fn(x) {
+              if (x == 0) {
+                  return 0;
+              } else {
+                  if (x == 1) {
+                      return 1;
+                  } else {
+                      fibonacci(x - 1) + fibonacci(x - 2);
+                  }
+              }
+          };
+          fibonacci(15);
+          `,
+			610,
+		},
 	}
 
 	for _, tt := range tests {

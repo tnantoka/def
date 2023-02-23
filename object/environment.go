@@ -7,12 +7,12 @@ type Environment struct {
 
 func NewEnvironment() *Environment {
 	s := make(map[string]Object)
-	return &Environment{store: s}
+	return &Environment{store: s, outer: nil}
 }
 
 func NewEnclosedEnvironment(outer *Environment) *Environment {
 	env := NewEnvironment()
-	env.store = outer.store
+	env.outer = outer
 	return env
 }
 
